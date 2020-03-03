@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+ceramic_key <- Sys.getenv("MAPBOX_API_KEY")
 ```
 # plusraster
 
@@ -53,10 +54,15 @@ gg + plus_raster(topo, breaks = seq(0, 1000, length.out = 10), alpha = 0.2)
 f <- system.file("external/rlogo.grd", package="raster")
 ggplot() + plus_raster(lazyraster::lazyraster(f)) + xlim(0, 101) + ylim(0, 77)
 
+ggplot() + plus_raster(raster(f), interpolate = FALSE) + xlim(20, 50) + ylim(20, 40)
+## underlying rasterImage interpolation is available
+ggplot() + plus_raster(raster(f), interpolate = TRUE) + xlim(20, 50) + ylim(20, 40)
 
 
 library(ceramic)
-ceramic_key <- "pk.eyJ1IjoibWRzdW1uZXIiLCJhIjoiY2p0bDI1aGY1MTRiNDQ0bWR2djh4dzgxOSJ9.zPM71aZwRWHc9U5kvDQDIA"
+
+## you need your own key here
+## ceramic_key <- "<your key>" ## see ?ceramic::get_api_key
 Sys.setenv(MAPBOX_API_KEY=ceramic_key)
 
 cc <- cc_location(raster::extent(147.3, 147.35, -42.89, -42.87), zoom = 15)

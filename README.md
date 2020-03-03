@@ -69,10 +69,29 @@ ggplot() + plus_raster(lazyraster::lazyraster(f)) + xlim(0, 101) + ylim(0, 77)
 
 ``` r
 
+ggplot() + plus_raster(raster(f), interpolate = FALSE) + xlim(20, 50) + ylim(20, 40)
+#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
+#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
+```
+
+<img src="man/figures/README-example-5.png" width="100%" />
+
+``` r
+## underlying rasterImage interpolation is available
+ggplot() + plus_raster(raster(f), interpolate = TRUE) + xlim(20, 50) + ylim(20, 40)
+#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
+#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
+```
+
+<img src="man/figures/README-example-6.png" width="100%" />
+
+``` r
 
 
 library(ceramic)
-ceramic_key <- "pk.eyJ1IjoibWRzdW1uZXIiLCJhIjoiY2p0bDI1aGY1MTRiNDQ0bWR2djh4dzgxOSJ9.zPM71aZwRWHc9U5kvDQDIA"
+
+## you need your own key here
+## ceramic_key <- "<your key>" ## see ?ceramic::get_api_key
 Sys.setenv(MAPBOX_API_KEY=ceramic_key)
 
 cc <- cc_location(raster::extent(147.3, 147.35, -42.89, -42.87), zoom = 15)
@@ -89,7 +108,7 @@ g2 <- ggplot() + xlim(raster::xmin(cc),
 print(g2)
 ```
 
-<img src="man/figures/README-example-5.png" width="100%" />
+<img src="man/figures/README-example-7.png" width="100%" />
 
 ``` r
 
@@ -101,7 +120,7 @@ g3 <- ggplot() + xlim(raster::xmin(cc),
 print(g3)
 ```
 
-<img src="man/figures/README-example-6.png" width="100%" />
+<img src="man/figures/README-example-8.png" width="100%" />
 
 -----
 

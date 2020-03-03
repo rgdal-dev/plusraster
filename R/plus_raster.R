@@ -13,7 +13,7 @@
 #' @param alpha defaults to 1, set from 0-1 for constant transparancy
 #' @param rgb defaults to `TRUE`, set to `FALSE` to allow manual colour mapping on first layer only
 #' @param dim optional dimensions for lazyraster input case
-#'
+#' @param interpolate logical passed to [ggplot2::annotation_raster()]
 #' @return ggplot2 annotation object
 #' @export
 #'
@@ -26,7 +26,8 @@
 #' r <- raster(volcano, xmn = 0, xmx = 10, ymn = -2, ymx = 50)
 #' ggplot() + plus_raster(r, col = rainbow(10), breaks = seq(90, 190, by = 10))  +
 #'   xlim(0, 10) + ylim(0, 50) + coord_equal()
-plus_raster <- function(x, col, ..., breaks = NULL, alpha = 1, rgb = TRUE, dim = c(256, 256)) {
+plus_raster <- function(x, col, ..., breaks = NULL, alpha = 1, rgb = TRUE, dim = c(256, 256),
+                        interpolate = FALSE) {
   if (inherits(x, "lazyraster")) {
     x <- lazyraster::as_raster(x, dim = dim)
   }
@@ -47,5 +48,6 @@ plus_raster <- function(x, col, ..., breaks = NULL, alpha = 1, rgb = TRUE, dim =
   }
   ggplot2::annotation_raster(m,
                              raster::xmin(x), raster::xmax(x),
-                             raster::ymin(x), raster::ymax(x))
+                             raster::ymin(x), raster::ymax(x),
+                             interpolate = interpolate)
 }
