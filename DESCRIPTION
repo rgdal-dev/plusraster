@@ -1,0 +1,11 @@
+Package: plusraster
+Title: Prepare Raster for Grammar of Graphics Plot
+Version: 0.0.1
+Authors@R: person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre"))
+Description: Prepare raster data for use in 'ggplot2'.  The general form in Grammar of Graphics
+ is to expand a raster into a full 'xyz' data frame, but there is an annotation mechanism that works
+ fast and avoids this. Functions here simply prepare data for this annotation workflow. 
+Depends:
+    R (>= 3.2.2)
+License: GPL-3
+LazyData: true
