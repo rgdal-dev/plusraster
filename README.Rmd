@@ -84,6 +84,29 @@ print(g3)
 
 ```
 
+
+## Timings
+
+```{r timings}
+big <- quadmesh::etopo #raster::disaggregate(quadmesh::etopo, fact = 4)
+
+system.time({
+pr <- ggplot() + xlim(-180, 180) + ylim(-90, 0) + 
+  plus_raster(big, col = colorRampPalette(scales::brewer_pal()(9)[9:5])(26))
+                             print(pr)
+})
+
+
+
+system.time({
+  dr <- ggplot(as.data.frame(big, xy = TRUE), aes(x, y, fill = layer)) + geom_raster()
+  
+  print(dr)
+})
+
+
+```
+
 ---
 
 Please note that the 'plusraster' project is released with a

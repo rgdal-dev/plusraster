@@ -122,6 +122,37 @@ print(g3)
 
 <img src="man/figures/README-example-8.png" width="100%" />
 
+## Timings
+
+``` r
+big <- quadmesh::etopo #raster::disaggregate(quadmesh::etopo, fact = 4)
+
+system.time({
+pr <- ggplot() + xlim(-180, 180) + ylim(-90, 0) + 
+  plus_raster(big, col = colorRampPalette(scales::brewer_pal()(9)[9:5])(26))
+                             print(pr)
+})
+#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
+```
+
+<img src="man/figures/README-timings-1.png" width="100%" />
+
+    #>    user  system elapsed 
+    #>   0.167   0.000   0.168
+    
+    
+    
+    system.time({
+      dr <- ggplot(as.data.frame(big, xy = TRUE), aes(x, y, fill = layer)) + geom_raster()
+      
+      print(dr)
+    })
+
+<img src="man/figures/README-timings-2.png" width="100%" />
+
+    #>    user  system elapsed 
+    #>   1.251   0.040   1.294
+
 -----
 
 Please note that the ‘plusraster’ project is released with a

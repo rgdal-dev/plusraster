@@ -51,3 +51,4 @@ plus_raster <- function(x, col, ..., breaks = NULL, alpha = 1, rgb = TRUE, dim =
                              raster::ymin(x), raster::ymax(x),
                              interpolate = interpolate)
 }
+
