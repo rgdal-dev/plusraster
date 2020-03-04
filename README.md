@@ -38,14 +38,12 @@ topo <- quadmesh::etopo
 gg <- ggplot() + xlim(-180, 180) + ylim(-90, 0)
 
 gg + plus_raster(topo, col = viridis::viridis(100), breaks = seq(-8000, 5000, length.out = 12)) 
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />
 
 ``` r
 gg + plus_raster(topo, col = viridis::viridis(100), breaks = quantile(topo, seq(0, 1,length.out = 15))) 
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
 ```
 
 <img src="man/figures/README-example-2.png" width="100%" />
@@ -53,7 +51,6 @@ gg + plus_raster(topo, col = viridis::viridis(100), breaks = quantile(topo, seq(
 ``` r
 
 gg + plus_raster(topo, breaks = seq(0, 1000, length.out = 10), alpha = 0.2)
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
 ```
 
 <img src="man/figures/README-example-3.png" width="100%" />
@@ -62,28 +59,19 @@ gg + plus_raster(topo, breaks = seq(0, 1000, length.out = 10), alpha = 0.2)
 
 
 f <- system.file("external/rlogo.grd", package="raster")
-ggplot() + plus_raster(lazyraster::lazyraster(f)) + xlim(0, 101) + ylim(0, 77)
+# ggplot() + plus_raster(lazyraster::lazyraster(f)) + xlim(0, 101) + ylim(0, 77)
+
+ggplot() + plus_raster(raster(f), interpolate = FALSE) + xlim(20, 50) + ylim(20, 40)
 ```
 
 <img src="man/figures/README-example-4.png" width="100%" />
 
 ``` r
-
-ggplot() + plus_raster(raster(f), interpolate = FALSE) + xlim(20, 50) + ylim(20, 40)
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
+## underlying rasterImage interpolation is available
+ggplot() + plus_raster(raster(f), interpolate = TRUE) + xlim(20, 50) + ylim(20, 40)
 ```
 
 <img src="man/figures/README-example-5.png" width="100%" />
-
-``` r
-## underlying rasterImage interpolation is available
-ggplot() + plus_raster(raster(f), interpolate = TRUE) + xlim(20, 50) + ylim(20, 40)
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
-```
-
-<img src="man/figures/README-example-6.png" width="100%" />
 
 ``` r
 
@@ -95,12 +83,8 @@ library(ceramic)
 Sys.setenv(MAPBOX_API_KEY=ceramic_key)
 
 cc <- cc_location(raster::extent(147.3, 147.35, -42.89, -42.87), zoom = 15)
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
 #> Preparing to download: 18 tiles at zoom = 15 from 
 #> https://api.mapbox.com/v4/mapbox.satellite/
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
 g2 <- ggplot() + xlim(raster::xmin(cc), 
                       raster::xmax(cc)) + ylim(raster::ymin(cc), raster::ymax(cc)) + 
   plus_raster(cc, alpha = 0.9) + 
@@ -108,7 +92,7 @@ g2 <- ggplot() + xlim(raster::xmin(cc),
 print(g2)
 ```
 
-<img src="man/figures/README-example-7.png" width="100%" />
+<img src="man/figures/README-example-6.png" width="100%" />
 
 ``` r
 
@@ -120,7 +104,7 @@ g3 <- ggplot() + xlim(raster::xmin(cc),
 print(g3)
 ```
 
-<img src="man/figures/README-example-8.png" width="100%" />
+<img src="man/figures/README-example-7.png" width="100%" />
 
 ## Timings
 
@@ -132,13 +116,12 @@ pr <- ggplot() + xlim(-180, 180) + ylim(-90, 0) +
   plus_raster(big, col = colorRampPalette(scales::brewer_pal()(9)[9:5])(26))
                              print(pr)
 })
-#> NOTE: rgdal::checkCRSArgs: no proj_defs.dat in PROJ.4 shared files
 ```
 
 <img src="man/figures/README-timings-1.png" width="100%" />
 
     #>    user  system elapsed 
-    #>   0.167   0.000   0.168
+    #>    0.25    0.03    0.28
     
     
     
@@ -151,9 +134,31 @@ pr <- ggplot() + xlim(-180, 180) + ylim(-90, 0) +
 <img src="man/figures/README-timings-2.png" width="100%" />
 
     #>    user  system elapsed 
-    #>   1.251   0.040   1.294
+    #>    1.97    0.11    2.09
 
------
+## VERY EXPERIMENTAL
+
+``` r
+ggplot(big) 
+```
+
+<img src="man/figures/README-expr-1.png" width="100%" />
+
+``` r
+
+ggplot(big) + coord_equal() + geom_sf(data = sf::st_as_sf(raster::rasterToContour(big)))
+#> Coordinate system already present. Adding new coordinate system, which will replace the existing one.
+```
+
+<img src="man/figures/README-expr-2.png" width="100%" />
+
+``` r
+
+
+ggplot(cc) + coord_equal()
+```
+
+## <img src="man/figures/README-expr-3.png" width="100%" />
 
 Please note that the ‘plusraster’ project is released with a
 [Contributor Code of

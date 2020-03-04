@@ -52,7 +52,7 @@ gg + plus_raster(topo, breaks = seq(0, 1000, length.out = 10), alpha = 0.2)
 
 
 f <- system.file("external/rlogo.grd", package="raster")
-ggplot() + plus_raster(lazyraster::lazyraster(f)) + xlim(0, 101) + ylim(0, 77)
+# ggplot() + plus_raster(lazyraster::lazyraster(f)) + xlim(0, 101) + ylim(0, 77)
 
 ggplot() + plus_raster(raster(f), interpolate = FALSE) + xlim(20, 50) + ylim(20, 40)
 ## underlying rasterImage interpolation is available
@@ -107,6 +107,18 @@ system.time({
 
 ```
 
+
+## VERY EXPERIMENTAL
+
+```{r expr}
+ggplot(big) 
+
+ggplot(big) + coord_equal() + geom_sf(data = sf::st_as_sf(raster::rasterToContour(big)))
+
+
+ggplot(cc) + coord_equal()
+
+```
 ---
 
 Please note that the 'plusraster' project is released with a
