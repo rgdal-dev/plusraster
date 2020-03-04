@@ -28,9 +28,9 @@
 #'   xlim(0, 10) + ylim(0, 50) + coord_equal()
 plus_raster <- function(x, col, ..., breaks = NULL, alpha = 1, rgb = TRUE, dim = c(256, 256),
                         interpolate = FALSE) {
-  if (inherits(x, "lazyraster")) {
-    x <- lazyraster::as_raster(x, dim = dim)
-  }
+  # if (inherits(x, "lazyraster")) {
+  #   x <- lazyraster::as_raster(x, dim = dim)
+  # }
   # don't want RGB interp so drop layers, also drop if 2, 5, 6, .. layers because
   # that's not RGB or RGBA
   if (!rgb || raster::nlayers(x) == 2 || raster::nlayers(x) > 4) {
