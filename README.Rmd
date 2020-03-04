@@ -118,6 +118,17 @@ ggplot(big) + coord_equal() + geom_sf(data = sf::st_as_sf(raster::rasterToContou
 
 ggplot(cc) + coord_equal()
 
+
+
+ggplot(big) + xlim(100, 150)
+
+## the dummy points get cropped so warning
+ggplot(big) + coord_equal() + ylim(-70, -30) + xlim(150, 250)
+
+
+
+
+
 ```
 ---
 
