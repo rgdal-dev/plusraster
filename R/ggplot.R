@@ -25,23 +25,21 @@ ggplot.BasicRaster <- function (data = NULL, mapping = aes(), ..., environment =
   if (!missing(mapping) && !inherits(mapping, "uneval")) {
     abort("Mapping should be created with `aes()` or `aes_()`.")
   }
-
-  dummy <- expand.grid(x = spex::xlim(data), y = spex::ylim(data))
+  ex <- .numeric_extent(data)
+  dummy <- expand.grid(x = ex[1:2], y = ex[3:4])
   p <- structure(list(
     data = data,
     layers = list(),
     scales = ggplot2:::scales_list(),
     mapping = mapping,
     theme = list(),
-    coordinates = coord_cartesian(default = TRUE),
+    coordinates = ggplot2::coord_cartesian(default = TRUE),
     facet = facet_null(),
     plot_env = environment
   ), class = c("gg", "ggplot"))
-
   p$labels <- ggplot2:::make_labels(mapping)
-
-  set_last_plot(p)
-  p + geom_point(data = dummy, aes(x, y), pch = "") + plus_raster(data)
+  ggplot2::set_last_plot(p)
+  p + ggplot2::geom_point(data = dummy, aes(x, y), pch = "") + plus_raster(data)
 }
 
 ggplot.character <- function (data = NULL, mapping = aes(), ..., environment = parent.frame()) {
