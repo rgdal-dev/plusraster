@@ -14,6 +14,10 @@ knitr::opts_chunk$set(
   out.width = "100%"
 )
 ceramic_key <- Sys.getenv("MAPBOX_API_KEY")
+library(methods)
+library(raster)
+setMethod("couldBeLonLat", signature = "Extent", 
+          function(x) couldBeLonLat(spex::spex(x)))
 ```
 # plusraster
 
@@ -34,6 +38,7 @@ remotes::install_github("mdsumner/plusraster")
 
 ## Example
 
+This sections shows how compellingly fast raster gg can be, the problem usually is having to expand every single pixel coordinate into a data frame, just so this can be compressed into the four numbers defining the extent before plotting. This code is bad, naive ggplot2. 
 
 ```{r example}
 library(plusraster)
@@ -107,12 +112,43 @@ system.time({
 ```
 
 
+## VERY DEV 
+
+This section includes a real-ish new Geom, the understanding for which was taking ruthlessly from statsmaths/ggimg. You give it a data frame of files, and it invokes GDAL to find out their extent so it can plot them as rasterGrobs. 
+
+It's very good because it uses lazy-GDAL load to only read a reasonable amount of pixels, this is completely general and can be used to fit any set of pixels within any window and via a variety of interpolation algorithms, from dozens of GDAL formats. Ultimately the ggplot should tell GDAL how much and what window. 
+
+It's not very good because it doens't update the plot extent with the coords you use in `draw_panel()`, but that's easy to fix I think. 
+
+It's also not very good because it doesn't deal with missing values (sentinel value) in the variety of GDAL rasters we can have, and doesn't detect the case of RGB imagery. Soon ...
+
+
+```{r plusdev}
+
+library(dplyr)
+library(ggplot2)
+
+pngs <- system.file(file.path("extdata", c("file.png", "file2.png")), 
+                    package = "plusraster", mustWork = TRUE)
+## here's the magic, two geo-plots in geo-space and all we gave was the file names
+d <- tibble::tibble(path= pngs)
+ggplot(d[2:1, ]) + plusraster:::geom_gdal(aes(path = path)) + xlim(0, 180) + ylim(-90, 0)
+
+
+
+#plusraster:::create_tiles(pngs) %>%
+#  ggplot() + geom_rect(aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
+
+```
+
+
 ## VERY EXPERIMENTAL
 
-```{r expr}
+```{r expr, eva}
 ggplot(big) 
 
-ggplot(big) + coord_equal() + geom_sf(data = sf::st_as_sf(raster::rasterToContour(big)))
+# some gg-sf problem on this machine (today)
+#ggplot(big) + coord_equal() + geom_sf(data = sf::st_as_sf(raster::rasterToContour(big)))
 
 
 ggplot(cc) + coord_equal()
