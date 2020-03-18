@@ -44,5 +44,30 @@ ggplot.BasicRaster <- function (data = NULL, mapping = aes(), ..., environment =
   p + geom_point(data = dummy, aes(x, y), pch = "") + plus_raster(data)
 }
 
+ggplot.character <- function (data = NULL, mapping = aes(), ..., environment = parent.frame()) {
+  if (!missing(mapping) && !inherits(mapping, "uneval")) {
+    abort("Mapping should be created with `aes()` or `aes_()`.")
+  }
+  lr <- lazyraster::lazyraster(data)
+  data <- lazyraster::as_raster(lr, band = NULL)
+  if (raster::ncell(data) == 2L | raster::ncell(data) > 4L) {
+    data <- raster::subset(data, 1L)
+  }
+  dummy <- expand.grid(x = spex::xlim(data), y = spex::ylim(data))
+  p <- structure(list(
+    data = data,
+    layers = list(),
+    scales = ggplot2:::scales_list(),
+    mapping = mapping,
+    theme = list(),
+    coordinates = coord_cartesian(default = TRUE),
+    facet = facet_null(),
+    plot_env = environment
+  ), class = c("gg", "ggplot"))
 
+  p$labels <- ggplot2:::make_labels(mapping)
+
+  set_last_plot(p)
+  p + geom_point(data = dummy, aes(x, y), pch = "") + plus_raster(data)
+}
 
