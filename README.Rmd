@@ -20,9 +20,8 @@ ceramic_key <- Sys.getenv("MAPBOX_API_KEY")
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of plusraster is to fast plot raster images in ggplot2. There is a `plus_raster()` function that works like `image()` for single-layer rasters or like `plotRGB()` for 3 or 4 layer rasters. Because we use raster annotation, we must set the xlim and ylim separately (or have it already set up by other data). 
+The goal of plusraster is to fast plot raster images in ggplot2. There is a `plus_raster()` function that works like `image()` for single-layer rasters or like `plotRGB()` for 3 or 4 layer raster. 
 
-(I'm still working my way around gg layers, surely we can grab the extent to do this and/or inherit from the input gg upstream). 
 
 ## Installation
 
